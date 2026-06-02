@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>手助网吧加盟结算系统</title>
+    <title>HAND IN HAND · 手助网吧 - 加盟结算平台</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -14,9 +14,9 @@
         }
 
         :root {
-            --primary: #1677ff;
-            --primary-dark: #0958d8;
-            --primary-light: #4096ff;
+            --primary: #E74C3C;
+            --primary-dark: #C0392B;
+            --primary-light: #FF6B5B;
             --success: #52c41a;
             --warning: #faad14;
             --error: #ff4d4f;
@@ -49,9 +49,9 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at 20% 20%, rgba(22, 119, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(64, 150, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(22, 119, 255, 0.05) 0%, transparent 70%);
+                radial-gradient(ellipse at 20% 20%, rgba(231, 76, 60, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 107, 91, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(231, 76, 60, 0.05) 0%, transparent 70%);
             animation: BGMesh 20s ease-in-out infinite;
             z-index: 0;
         }
@@ -90,6 +90,16 @@
             animation-delay: 5s;
         }
 
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: rgba(192, 57, 43, 0.4);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 10s;
+        }
+
         @keyframes OrbFloat {
             0%, 100% { transform: translate(0, 0); }
             25% { transform: translate(50px, 50px); }
@@ -114,7 +124,7 @@
             box-shadow: 
                 0 0 0 1px rgba(255, 255, 255, 0.03),
                 0 25px 50px rgba(0, 0, 0, 0.4),
-                0 0 100px rgba(22, 119, 255, 0.1);
+                0 0 100px rgba(231, 76, 60, 0.1);
             animation: CardEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
@@ -150,8 +160,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(22, 119, 255, 0.1);
-            border: 1px solid rgba(22, 119, 255, 0.2);
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.2);
             padding: 6px 16px;
             border-radius: 20px;
             margin-bottom: 24px;
@@ -162,33 +172,50 @@
         }
 
         .logo-wrapper {
-            width: 72px;
-            height: 72px;
+            width: 80px;
+            height: 80px;
             margin: 0 auto 20px;
             position: relative;
         }
 
         .logo {
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #E74C3C 0%, #FF6B5B 100%);
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(22, 119, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
             animation: LogoFloat 6s ease-in-out infinite;
             position: relative;
             z-index: 1;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: Shine 3s ease-in-out infinite;
         }
 
         .logo::after {
             content: '';
             position: absolute;
-            inset: -2px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            inset: -3px;
+            background: linear-gradient(135deg, #E74C3C, #FF6B5B);
             border-radius: 22px;
-            opacity: 0.2;
+            opacity: 0.3;
             z-index: -1;
             animation: LogoGlow 2s ease-in-out infinite;
         }
@@ -199,13 +226,24 @@
         }
 
         @keyframes LogoGlow {
-            0%, 100% { transform: scale(1); opacity: 0.2; }
-            50% { transform: scale(1.1); opacity: 0.1; }
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.15; }
         }
 
-        .logo svg {
-            width: 40px;
-            height: 40px;
+        @keyframes Shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .logo-text {
+            font-size: 36px;
+            font-weight: 900;
+            color: white;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            letter-spacing: 2px;
         }
 
         .login-header h1 {
@@ -272,7 +310,7 @@
         }
 
         .role-tab.active {
-            box-shadow: 0 4px 15px rgba(22, 119, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
 
         .role-icon {
@@ -362,7 +400,7 @@
 
         .oa-login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(22, 119, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
         }
 
         .oa-login-btn:active {
@@ -399,7 +437,7 @@
         .form-group input:focus {
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
         }
 
         .form-group input::placeholder {
@@ -478,7 +516,7 @@
 
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(22, 119, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
         }
 
         .login-btn:active {
@@ -520,8 +558,8 @@
         }
 
         .message.info {
-            background: rgba(22, 119, 255, 0.1);
-            border: 1px solid rgba(22, 119, 255, 0.3);
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
             color: var(--primary-light);
         }
 
@@ -647,6 +685,7 @@
     <!-- Floating orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
     <div class="container">
         <div class="login-card">
@@ -660,17 +699,12 @@
                 
                 <div class="logo-wrapper">
                     <div class="logo">
-                        <svg viewBox="0 0 48 48" fill="none">
-                            <rect width="48" height="48" rx="8" fill="transparent"/>
-                            <path d="M12 16h24v2H12zm0 6h24v2H12zm0 6h18v2H12z" fill="white"/>
-                            <circle cx="36" cy="36" r="8" fill="rgba(255,255,255,0.2)"/>
-                            <path d="M34 36l3 3 5-5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        </svg>
+                        <span class="logo-text">霸</span>
                     </div>
                 </div>
 
-                <h1>手助网吧加盟结算系统</h1>
-                <p class="subtitle">Cyber Cafe Franchise Settlement System</p>
+                <h1>HAND IN HAND · 手助网吧</h1>
+                <p class="subtitle">加盟结算平台</p>
             </div>
 
             <div class="role-selector">
@@ -768,7 +802,7 @@
         </div>
 
         <div class="footer">
-            <p>© 2024 手助网吧加盟结算系统 v1.0.0</p>
+            <p>© 2024 HAND IN HAND · 手助网吧 加盟结算平台 v1.0.0</p>
             <p>技术支持：腾讯应用宝 | <a href="javascript:void(0)" style="color: var(--primary-light);">帮助中心</a></p>
         </div>
     </div>

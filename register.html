@@ -794,7 +794,7 @@
 
                     <div class="form-group" id="relatedAgentGroup">
                         <label for="relatedAgent">关联网吧/代理 <span style="color: var(--text-tertiary);">(选填)</span></label>
-                        <input type="text" id="relatedAgent" placeholder="请输入代理ID或邀请码（选填）">
+                        <input type="text" id="relatedAgent" placeholder="请输入代理ID或邀请码（选填）" autocomplete="off">
                         <div id="agentHint" style="display: none; margin-top: 12px; padding: 12px 16px; background: rgba(250, 173, 20, 0.1); border: 1px solid rgba(250, 173, 20, 0.3); border-radius: 10px; font-size: 13px; color: var(--warning); line-height: 1.6;">
                             ⚠️ 未关联代理：将由迪越直连结算<br>
                             输入代理ID可关联到对应代理；不填则由迪越直连结算
@@ -876,11 +876,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="enterpriseName">企业名称 <span class="required">*</span></label>
-                                <input type="text" id="enterpriseName" placeholder="请输入企业名称">
+                                <input type="text" id="enterpriseName" placeholder="请输入企业名称" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="creditCode">统一社会信用代码 <span class="required">*</span></label>
-                                <input type="text" id="creditCode" placeholder="请输入统一社会信用代码">
+                                <input type="text" id="creditCode" placeholder="请输入统一社会信用代码" autocomplete="off">
                             </div>
                         </div>
 
@@ -902,11 +902,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="contactName">联系人 <span class="required">*</span></label>
-                            <input type="text" id="contactName" placeholder="请输入联系人姓名">
+                            <input type="text" id="contactName" placeholder="请输入联系人姓名" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="contactPhone">手机号码 <span class="required">*</span></label>
-                            <input type="tel" id="contactPhone" placeholder="请输入手机号码">
+                            <input type="tel" id="contactPhone" placeholder="请输入手机号码" autocomplete="off">
                         </div>
                     </div>
 
@@ -915,20 +915,20 @@
                         <div class="form-group">
                             <label for="phoneCode">手机验证码 <span class="required">*</span></label>
                             <div class="verification-group">
-                                <input type="text" id="phoneCode" placeholder="请输入手机验证码">
+                                <input type="text" id="phoneCode" placeholder="请输入手机验证码" autocomplete="off">
                                 <button type="button" class="verification-btn" onclick="sendPhoneCode()">获取验证码</button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="contactEmail">邮箱地址 <span class="required">*</span></label>
-                            <input type="email" id="contactEmail" placeholder="请输入邮箱地址">
+                            <input type="email" id="contactEmail" placeholder="请输入邮箱地址" autocomplete="off">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="emailCode">邮箱验证码 <span class="required">*</span></label>
                         <div class="verification-group">
-                            <input type="text" id="emailCode" placeholder="请输入邮箱验证码">
+                            <input type="text" id="emailCode" placeholder="请输入邮箱验证码" autocomplete="off">
                             <button type="button" class="verification-btn" onclick="sendEmailCode()">获取验证码</button>
                         </div>
                     </div>
@@ -973,7 +973,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="bankAccountName">开户名 <span class="required">*</span></label>
-                                <input type="text" id="bankAccountName" placeholder="请输入开户名">
+                                <input type="text" id="bankAccountName" placeholder="请输入开户名" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="bankName">开户银行 <span class="required">*</span></label>
@@ -1004,19 +1004,19 @@
 
                         <div class="form-group">
                             <label for="bankAccountNumber">银行账号 <span class="required">*</span></label>
-                            <input type="text" id="bankAccountNumber" placeholder="请输入银行账号">
+                            <input type="text" id="bankAccountNumber" placeholder="请输入银行账号" autocomplete="off">
                         </div>
 
                         <!-- 确认银行账号 -->
                         <div class="form-group bank-account-confirm">
                             <label for="confirmBankAccount">确认银行账号 <span class="required">*</span></label>
-                            <input type="text" id="confirmBankAccount" placeholder="请再次输入银行账号">
+                            <input type="text" id="confirmBankAccount" placeholder="请再次输入银行账号" autocomplete="off">
                             <div id="bankAccountMatch" style="display: none; margin-top: 8px; font-size: 12px;"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="bankBranch">开户支行 <span class="required">*</span></label>
-                            <input type="text" id="bankBranch" placeholder="请输入开户支行">
+                            <input type="text" id="bankBranch" placeholder="请输入开户支行" autocomplete="off">
                         </div>
                     </div>
 

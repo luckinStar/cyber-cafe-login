@@ -1,0 +1,12 @@
+{
+  "name": "cyber-cafe-login",
+  "version": "1.0.0",
+  "description": "手助网吧加盟结算系统登录界面",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve ."
+  },
+  "keywords": ["cyber-cafe", "login", "settlement"],
+  "author": "",
+  "license": "MIT"
+}

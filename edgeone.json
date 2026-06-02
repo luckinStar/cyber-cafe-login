@@ -1,0 +1,7 @@
+{
+  "name": "cyber-cafe-login",
+  "type": "static",
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "environment": {}
+}

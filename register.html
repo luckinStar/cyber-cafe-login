@@ -680,9 +680,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="relatedAgentGroup">
                         <label for="relatedAgent">关联网吧/代理 <span style="color: var(--text-tertiary);">(选填)</span></label>
-                        <input type="text" id="relatedAgent" placeholder="请输入代理邀请码或网吧编号（选填）">
+                        <input type="text" id="relatedAgent" placeholder="请输入代理ID或邀请码（选填）">
+                        <div id="agentHint" style="display: none; margin-top: 12px; padding: 12px 16px; background: rgba(250, 173, 20, 0.1); border: 1px solid rgba(250, 173, 20, 0.3); border-radius: 10px; font-size: 13px; color: var(--warning); line-height: 1.6;">
+                            ⚠️ 未关联代理：将由迪越直连结算<br>
+                            输入代理ID可关联到对应代理；不填则由迪越直连结算
+                        </div>
                     </div>
                 </div>
 
@@ -706,11 +710,47 @@
                     <!-- 个人认证 -->
                     <div id="personalAuth" style="display: none;">
                         <div class="form-group">
-                            <label>人脸识别和身份认证</label>
-                            <div class="upload-area" onclick="alert('调用应用宝开发者认证能力 - 人脸识别')">
-                                <div class="upload-icon">📷</div>
-                                <div class="upload-text">点击进行人脸识别认证</div>
+                            <label>身份证件上传 <span class="required">*</span></label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                <div class="upload-area" onclick="uploadIDCard('front')" id="idCardFront" style="padding: 24px;">
+                                    <div class="upload-icon">🪪</div>
+                                    <div class="upload-text">身份证正面</div>
+                                    <div class="upload-hint">人像面</div>
+                                </div>
+                                <div class="upload-area" onclick="uploadIDCard('back')" id="idCardBack" style="padding: 24px;">
+                                    <div class="upload-icon">🔢</div>
+                                    <div class="upload-text">身份证反面</div>
+                                    <div class="upload-hint">国徽面</div>
+                                </div>
+                            </div>
+                            <div id="idCardStatus" style="display: none; padding: 10px 16px; background: rgba(82, 196, 26, 0.1); border: 1px solid rgba(82, 196, 26, 0.3); border-radius: 10px; font-size: 13px; color: var(--success);">
+                                ✅ 身份证件已上传，信息已自动填充
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>人脸识别认证 <span class="required">*</span></label>
+                            <div class="upload-area" onclick="startFaceRecognition()">
+                                <div class="upload-icon">👤</div>
+                                <div class="upload-text">点击进行人脸识别</div>
                                 <div class="upload-hint">将调用应用宝开发者认证能力</div>
+                            </div>
+                            <div id="faceAuthStatus" style="display: none; margin-top: 12px; padding: 10px 16px; background: rgba(82, 196, 26, 0.1); border: 1px solid rgba(82, 196, 26, 0.3); border-radius: 10px; font-size: 13px; color: var(--success);">
+                                ✅ 人脸识别认证通过
+                            </div>
+                        </div>
+
+                        <div id="autoFilledInfo" style="display: none; margin-top: 20px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 12px;">
+                            <div style="font-size: 14px; color: var(--text-primary); font-weight: 500; margin-bottom: 16px;">📋 自动获取的认证信息</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px;">姓名</div>
+                                    <input type="text" id="autoName" readonly style="background: rgba(255, 255, 255, 0.05); cursor: not-allowed;">
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px;">身份证号码</div>
+                                    <input type="text" id="autoIDNumber" readonly style="background: rgba(255, 255, 255, 0.05); cursor: not-allowed;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -890,13 +930,109 @@
             bankAccountName: '',
             bankName: '',
             bankAccountNumber: '',
-            bankBranch: ''
+            bankBranch: '',
+            idVerifiedName: '',
+            idNumber: '',
+            idCardFrontUploaded: false,
+            idCardBackUploaded: false,
+            faceVerified: false
         };
 
         function selectRole(role) {
             formData.role = role;
             document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
             document.querySelector(`[data-role="${role}"]`).classList.add('selected');
+            
+            // 网吧主角色：显示代理关联提示
+            const agentHint = document.getElementById('agentHint');
+            const relatedAgentInput = document.getElementById('relatedAgent');
+            
+            if (role === 'owner') {
+                agentHint.style.display = 'block';
+                relatedAgentInput.placeholder = '请输入代理ID（选填，不填则由迪越直连结算）';
+            } else {
+                agentHint.style.display = 'none';
+                relatedAgentInput.placeholder = '请输入代理邀请码或网吧编号（选填）';
+            }
+        }
+
+        function uploadIDCard(side) {
+            // 模拟调用应用宝开发者认证能力 - 身份证上传
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (side === 'front') {
+                        document.getElementById('idCardFront').innerHTML = `
+                            <div style="font-size: 36px; margin-bottom: 8px;">✅</div>
+                            <div style="font-size: 13px; color: var(--success);">身份证正面已上传</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 4px;">${file.name}</div>
+                        `;
+                        document.getElementById('idCardFront').style.borderColor = 'var(--success)';
+                        formData.idCardFrontUploaded = true;
+                    } else {
+                        document.getElementById('idCardBack').innerHTML = `
+                            <div style="font-size: 36px; margin-bottom: 8px;">✅</div>
+                            <div style="font-size: 13px; color: var(--success);">身份证反面已上传</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 4px;">${file.name}</div>
+                        `;
+                        document.getElementById('idCardBack').style.borderColor = 'var(--success)';
+                        formData.idCardBackUploaded = true;
+                    }
+                    
+                    // 如果正反面都上传了，模拟OCR识别自动填充信息
+                    if (formData.idCardFrontUploaded && formData.idCardBackUploaded) {
+                        setTimeout(() => {
+                            autoFillIDInfo();
+                        }, 500);
+                    }
+                }
+            };
+            input.click();
+        }
+
+        function autoFillIDInfo() {
+            // 模拟调用应用宝开发者认证能力 - OCR识别身份证信息
+            // 实际应调用腾讯云OCR或应用宝认证接口
+            
+            const mockIDInfo = {
+                name: '张三',
+                idNumber: '440301199001011234'
+            };
+            
+            formData.idVerifiedName = mockIDInfo.name;
+            formData.idNumber = mockIDInfo.idNumber;
+            
+            document.getElementById('autoName').value = mockIDInfo.name;
+            document.getElementById('autoIDNumber').value = mockIDInfo.idNumber;
+            document.getElementById('autoFilledInfo').style.display = 'block';
+            document.getElementById('idCardStatus').style.display = 'block';
+            
+            showMessage('身份证件信息已自动填充，请确认信息是否正确', 'success');
+        }
+
+        function startFaceRecognition() {
+            // 模拟调用应用宝开发者认证能力 - 人脸识别
+            const btn = event.target.closest('.upload-area');
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = '<div class="spinner" style="margin: 0 auto 12px;"></div><div class="upload-text">正在进行人脸识别...</div>';
+            
+            setTimeout(() => {
+                // 模拟人脸识别成功
+                formData.faceVerified = true;
+                btn.innerHTML = `
+                    <div style="font-size: 36px; margin-bottom: 8px;">✅</div>
+                    <div class="upload-text">人脸识别认证通过</div>
+                    <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 4px;">与身份证信息一致</div>
+                `;
+                btn.style.borderColor = 'var(--success)';
+                document.getElementById('faceAuthStatus').style.display = 'block';
+                
+                showMessage('人脸识别认证通过！', 'success');
+            }, 2000);
         }
 
         function selectSubject(subject) {
@@ -985,6 +1121,16 @@
                         return false;
                     }
                 }
+                if (formData.subjectType === 'personal') {
+                    if (!formData.idCardFrontUploaded || !formData.idCardBackUploaded) {
+                        showMessage('请上传身份证件正反面', 'error');
+                        return false;
+                    }
+                    if (!formData.faceVerified) {
+                        showMessage('请完成人脸识别认证', 'error');
+                        return false;
+                    }
+                }
             } else if (currentStep === 3) {
                 if (!document.getElementById('contactName').value) {
                     showMessage('请输入联系人', 'error');
@@ -1013,6 +1159,9 @@
             } else if (currentStep === 2) {
                 formData.enterpriseName = document.getElementById('enterpriseName').value;
                 formData.creditCode = document.getElementById('creditCode').value;
+                // 保存身份证自动填充的信息
+                formData.idVerifiedName = document.getElementById('autoName').value;
+                formData.idNumber = document.getElementById('autoIDNumber').value;
             } else if (currentStep === 3) {
                 formData.contactName = document.getElementById('contactName').value;
                 formData.contactPhone = document.getElementById('contactPhone').value;
@@ -1042,13 +1191,37 @@
                     </div>
             `;
 
-            if (formData.relatedAgent) {
-                html += `
-                    <div>
-                        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">关联代理/网吧</div>
-                        <div style="font-size: 14px; color: var(--text-primary);">${formData.relatedAgent}</div>
-                    </div>
-                `;
+            // 网吧主角色：显示代理关联信息
+            if (formData.role === 'owner') {
+                if (formData.relatedAgent) {
+                    html += `
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">关联代理</div>
+                            <div style="font-size: 14px; color: var(--success);">${formData.relatedAgent}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">结算方式</div>
+                            <div style="font-size: 14px; color: var(--text-primary);">通过代理结算</div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div style="grid-column: 1 / -1;">
+                            <div style="padding: 12px; background: rgba(250, 173, 20, 0.1); border: 1px solid rgba(250, 173, 20, 0.3); border-radius: 8px; font-size: 13px; color: var(--warning);">
+                                ⚠️ 未关联代理：将由迪越直连结算
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                if (formData.relatedAgent) {
+                    html += `
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">关联网吧/代理</div>
+                            <div style="font-size: 14px; color: var(--text-primary);">${formData.relatedAgent}</div>
+                        </div>
+                    `;
+                }
             }
 
             if (formData.subjectType === 'enterprise') {
@@ -1060,6 +1233,28 @@
                     <div>
                         <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">统一社会信用代码</div>
                         <div style="font-size: 14px; color: var(--text-primary);">${formData.creditCode}</div>
+                    </div>
+                `;
+            }
+
+            // 个人认证：显示身份证信息
+            if (formData.subjectType === 'personal') {
+                html += `
+                    <div>
+                        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">姓名（实名认证）</div>
+                        <div style="font-size: 14px; color: var(--text-primary);">${formData.idVerifiedName || '待填充'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">身份证号码</div>
+                        <div style="font-size: 14px; color: var(--text-primary);">${formData.idNumber || '待填充'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">身份证认证</div>
+                        <div style="font-size: 14px; color: var(--success);">✅ 已上传并识别</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">人脸识别</div>
+                        <div style="font-size: 14px; color: var(--success);">✅ 认证通过</div>
                     </div>
                 `;
             }

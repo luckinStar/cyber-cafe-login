@@ -602,6 +602,64 @@
             font-size: 12px;
         }
 
+        /* 地址选择器样式 */
+        .address-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .address-selector select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .address-selector select:focus {
+            border-color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.1);
+        }
+
+        .address-selector select option {
+            background: #1a1a1a;
+            color: var(--text-primary);
+            padding: 8px;
+        }
+
+        /* 手机验证码并排样式 */
+        .phone-verify-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .phone-verify-group .form-group {
+            margin-bottom: 0;
+        }
+
+        /* 银行账号确认样式 */
+        .bank-account-confirm {
+            margin-top: 16px;
+        }
+
         @media (max-width: 768px) {
             .register-card {
                 padding: 32px 24px;
@@ -623,6 +681,14 @@
             .step-indicator::before {
                 left: 30px;
                 right: 30px;
+            }
+
+            .address-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .phone-verify-group {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -686,6 +752,10 @@
                         <div id="agentHint" style="display: none; margin-top: 12px; padding: 12px 16px; background: rgba(250, 173, 20, 0.1); border: 1px solid rgba(250, 173, 20, 0.3); border-radius: 10px; font-size: 13px; color: var(--warning); line-height: 1.6;">
                             ⚠️ 未关联代理：将由迪越直连结算<br>
                             输入代理ID可关联到对应代理；不填则由迪越直连结算
+                        </div>
+                        <div id="cybercafeHint" style="display: none; margin-top: 12px; padding: 12px 16px; background: rgba(250, 173, 20, 0.1); border: 1px solid rgba(250, 173, 20, 0.3); border-radius: 10px; font-size: 13px; color: var(--warning); line-height: 1.6;">
+                            ⚠️ 未关联网吧：可创建后再录入 / 关联<br>
+                            若你已有合作网吧，可输入网吧ID直接关联；也可注册入驻后再录入网吧
                         </div>
                     </div>
                 </div>
@@ -790,35 +860,48 @@
                         </div>
                         <div class="form-group">
                             <label for="contactPhone">手机号码 <span class="required">*</span></label>
+                            <input type="tel" id="contactPhone" placeholder="请输入手机号码">
+                        </div>
+                    </div>
+
+                    <!-- 手机验证码并排 -->
+                    <div class="phone-verify-group">
+                        <div class="form-group">
+                            <label for="phoneCode">手机验证码 <span class="required">*</span></label>
                             <div class="verification-group">
-                                <input type="tel" id="contactPhone" placeholder="请输入手机号码">
+                                <input type="text" id="phoneCode" placeholder="请输入手机验证码">
                                 <button type="button" class="verification-btn" onclick="sendPhoneCode()">获取验证码</button>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phoneCode">手机验证码 <span class="required">*</span></label>
-                        <input type="text" id="phoneCode" placeholder="请输入手机验证码">
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="contactEmail">邮箱地址 <span class="required">*</span></label>
-                            <div class="verification-group">
-                                <input type="email" id="contactEmail" placeholder="请输入邮箱地址">
-                                <button type="button" class="verification-btn" onclick="sendEmailCode()">获取验证码</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="emailCode">邮箱验证码 <span class="required">*</span></label>
-                            <input type="text" id="emailCode" placeholder="请输入邮箱验证码">
+                            <input type="email" id="contactEmail" placeholder="请输入邮箱地址">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="contactAddress">联系地址 <span class="required">*</span></label>
-                        <textarea id="contactAddress" placeholder="请输入详细联系地址"></textarea>
+                        <label for="emailCode">邮箱验证码 <span class="required">*</span></label>
+                        <div class="verification-group">
+                            <input type="text" id="emailCode" placeholder="请输入邮箱验证码">
+                            <button type="button" class="verification-btn" onclick="sendEmailCode()">获取验证码</button>
+                        </div>
+                    </div>
+
+                    <!-- 省市区三级联动地址选择 -->
+                    <div class="form-group">
+                        <label>联系地址 <span class="required">*</span></label>
+                        <div class="address-selector">
+                            <select id="province" onchange="selectProvince()">
+                                <option value="">请选择省份</option>
+                            </select>
+                            <select id="city" onchange="selectCity()" disabled>
+                                <option value="">请选择城市</option>
+                            </select>
+                            <select id="district" disabled>
+                                <option value="">请选择区县</option>
+                            </select>
+                        </div>
+                        <textarea id="contactAddress" placeholder="请输入详细地址（如街道、门牌号等）" style="margin-top: 12px;"></textarea>
                     </div>
                 </div>
 
@@ -848,13 +931,41 @@
                             </div>
                             <div class="form-group">
                                 <label for="bankName">开户银行 <span class="required">*</span></label>
-                                <input type="text" id="bankName" placeholder="请输入开户银行">
+                                <select id="bankName">
+                                    <option value="">请选择开户银行</option>
+                                    <option value="工商银行">工商银行</option>
+                                    <option value="农业银行">农业银行</option>
+                                    <option value="中国银行">中国银行</option>
+                                    <option value="建设银行">建设银行</option>
+                                    <option value="交通银行">交通银行</option>
+                                    <option value="邮储银行">邮储银行</option>
+                                    <option value="招商银行">招商银行</option>
+                                    <option value="浦发银行">浦发银行</option>
+                                    <option value="民生银行">民生银行</option>
+                                    <option value="兴业银行">兴业银行</option>
+                                    <option value="光大银行">光大银行</option>
+                                    <option value="华夏银行">华夏银行</option>
+                                    <option value="中信银行">中信银行</option>
+                                    <option value="平安银行">平安银行</option>
+                                    <option value="广发银行">广发银行</option>
+                                    <option value="浙商银行">浙商银行</option>
+                                    <option value="渤海银行">渤海银行</option>
+                                    <option value="恒丰银行">恒丰银行</option>
+                                    <option value="其他">其他</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="bankAccountNumber">银行账号 <span class="required">*</span></label>
                             <input type="text" id="bankAccountNumber" placeholder="请输入银行账号">
+                        </div>
+
+                        <!-- 确认银行账号 -->
+                        <div class="form-group bank-account-confirm">
+                            <label for="confirmBankAccount">确认银行账号 <span class="required">*</span></label>
+                            <input type="text" id="confirmBankAccount" placeholder="请再次输入银行账号">
+                            <div id="bankAccountMatch" style="display: none; margin-top: 8px; font-size: 12px;"></div>
                         </div>
 
                         <div class="form-group">
@@ -945,14 +1056,324 @@
             
             // 网吧主角色：显示代理关联提示
             const agentHint = document.getElementById('agentHint');
+            const cybercafeHint = document.getElementById('cybercafeHint');
             const relatedAgentInput = document.getElementById('relatedAgent');
             
             if (role === 'owner') {
                 agentHint.style.display = 'block';
+                cybercafeHint.style.display = 'none';
                 relatedAgentInput.placeholder = '请输入代理ID（选填，不填则由迪越直连结算）';
+                relatedAgentInput.title = '关联代理（选填）';
+            } else if (role === 'agent') {
+                agentHint.style.display = 'none';
+                cybercafeHint.style.display = 'block';
+                relatedAgentInput.placeholder = '请输入网吧ID（选填，可先入驻再录入）';
+                relatedAgentInput.title = '关联网吧（选填）';
             } else {
                 agentHint.style.display = 'none';
-                relatedAgentInput.placeholder = '请输入代理邀请码或网吧编号（选填）';
+                cybercafeHint.style.display = 'none';
+            }
+        }
+
+        // ============ 省市区三级联动数据 ============
+        const provinceData = [
+            { code: '110000', name: '北京市' },
+            { code: '120000', name: '天津市' },
+            { code: '130000', name: '河北省' },
+            { code: '140000', name: '山西省' },
+            { code: '150000', name: '内蒙古自治区' },
+            { code: '210000', name: '辽宁省' },
+            { code: '220000', name: '吉林省' },
+            { code: '230000', name: '黑龙江省' },
+            { code: '310000', name: '上海市' },
+            { code: '320000', name: '江苏省' },
+            { code: '330000', name: '浙江省' },
+            { code: '340000', name: '安徽省' },
+            { code: '350000', name: '福建省' },
+            { code: '360000', name: '江西省' },
+            { code: '370000', name: '山东省' },
+            { code: '410000', name: '河南省' },
+            { code: '420000', name: '湖北省' },
+            { code: '430000', name: '湖南省' },
+            { code: '440000', name: '广东省' },
+            { code: '450000', name: '广西壮族自治区' },
+            { code: '460000', name: '海南省' },
+            { code: '500000', name: '重庆市' },
+            { code: '510000', name: '四川省' },
+            { code: '520000', name: '贵州省' },
+            { code: '530000', name: '云南省' },
+            { code: '540000', name: '西藏自治区' },
+            { code: '610000', name: '陕西省' },
+            { code: '620000', name: '甘肃省' },
+            { code: '630000', name: '青海省' },
+            { code: '640000', name: '宁夏回族自治区' },
+            { code: '650000', name: '新疆维吾尔自治区' },
+            { code: '710000', name: '台湾省' },
+            { code: '810000', name: '香港特别行政区' },
+            { code: '820000', name: '澳门特别行政区' }
+        ];
+
+        // 城市数据（简化版，主要城市）
+        const cityData = {
+            '110000': [{ code: '110100', name: '北京市' }],
+            '120000': [{ code: '120100', name: '天津市' }],
+            '130000': [
+                { code: '130100', name: '石家庄市' },
+                { code: '130200', name: '唐山市' },
+                { code: '130300', name: '秦皇岛市' },
+                { code: '130400', name: '邯郸市' },
+                { code: '130500', name: '邢台市' },
+                { code: '130600', name: '保定市' },
+                { code: '130700', name: '张家口市' },
+                { code: '130800', name: '承德市' },
+                { code: '130900', name: '沧州市' },
+                { code: '131000', name: '廊坊市' },
+                { code: '131100', name: '衡水市' }
+            ],
+            '310000': [{ code: '310100', name: '上海市' }],
+            '320000': [
+                { code: '320100', name: '南京市' },
+                { code: '320200', name: '无锡市' },
+                { code: '320300', name: '徐州市' },
+                { code: '320400', name: '常州市' },
+                { code: '320500', name: '苏州市' },
+                { code: '320600', name: '南通市' },
+                { code: '320700', name: '连云港市' },
+                { code: '320800', name: '淮安市' },
+                { code: '320900', name: '盐城市' },
+                { code: '321000', name: '扬州市' },
+                { code: '321100', name: '镇江市' },
+                { code: '321200', name: '泰州市' },
+                { code: '321300', name: '宿迁市' }
+            ],
+            '330000': [
+                { code: '330100', name: '杭州市' },
+                { code: '330200', name: '宁波市' },
+                { code: '330300', name: '温州市' },
+                { code: '330400', name: '嘉兴市' },
+                { code: '330500', name: '湖州市' },
+                { code: '330600', name: '绍兴市' },
+                { code: '330700', name: '金华市' },
+                { code: '330800', name: '衢州市' },
+                { code: '330900', name: '舟山市' },
+                { code: '331000', name: '台州市' },
+                { code: '331100', name: '丽水市' }
+            ],
+            '440000': [
+                { code: '440100', name: '广州市' },
+                { code: '440200', name: '韶关市' },
+                { code: '440300', name: '深圳市' },
+                { code: '440400', name: '珠海市' },
+                { code: '440500', name: '汕头市' },
+                { code: '440600', name: '佛山市' },
+                { code: '440700', name: '江门市' },
+                { code: '440800', name: '湛江市' },
+                { code: '440900', name: '茂名市' },
+                { code: '441200', name: '肇庆市' },
+                { code: '441300', name: '惠州市' },
+                { code: '441400', name: '梅州市' },
+                { code: '441500', name: '汕尾市' },
+                { code: '441600', name: '河源市' },
+                { code: '441700', name: '阳江市' },
+                { code: '441800', name: '清远市' },
+                { code: '441900', name: '东莞市' },
+                { code: '442000', name: '中山市' },
+                { code: '445100', name: '潮州市' },
+                { code: '445200', name: '揭阳市' },
+                { code: '445300', name: '云浮市' }
+            ]
+        };
+
+        // 区县数据（简化版）
+        const districtData = {
+            '110100': [
+                { code: '110101', name: '东城区' },
+                { code: '110102', name: '西城区' },
+                { code: '110105', name: '朝阳区' },
+                { code: '110106', name: '丰台区' },
+                { code: '110107', name: '石景山区' },
+                { code: '110108', name: '海淀区' },
+                { code: '110109', name: '门头沟区' },
+                { code: '110111', name: '房山区' },
+                { code: '110112', name: '通州区' },
+                { code: '110113', name: '顺义区' },
+                { code: '110114', name: '昌平区' },
+                { code: '110115', name: '大兴区' },
+                { code: '110116', name: '怀柔区' },
+                { code: '110117', name: '平谷区' },
+                { code: '110118', name: '密云区' },
+                { code: '110119', name: '延庆区' }
+            ],
+            '310100': [
+                { code: '310101', name: '黄浦区' },
+                { code: '310104', name: '徐汇区' },
+                { code: '310105', name: '长宁区' },
+                { code: '310106', name: '静安区' },
+                { code: '310107', name: '普陀区' },
+                { code: '310109', name: '虹口区' },
+                { code: '310110', name: '杨浦区' },
+                { code: '310112', name: '闵行区' },
+                { code: '310113', name: '宝山区' },
+                { code: '310114', name: '嘉定区' },
+                { code: '310115', name: '浦东新区' },
+                { code: '310116', name: '金山区' },
+                { code: '310117', name: '松江区' },
+                { code: '310118', name: '青浦区' },
+                { code: '310120', name: '奉贤区' },
+                { code: '310151', name: '崇明区' }
+            ],
+            '440100': [
+                { code: '440103', name: '荔湾区' },
+                { code: '440104', name: '越秀区' },
+                { code: '440105', name: '海珠区' },
+                { code: '440106', name: '天河区' },
+                { code: '440111', name: '白云区' },
+                { code: '440112', name: '黄埔区' },
+                { code: '440113', name: '番禺区' },
+                { code: '440114', name: '花都区' },
+                { code: '440115', name: '南沙区' },
+                { code: '440117', name: '从化区' },
+                { code: '440118', name: '增城区' }
+            ],
+            '440300': [
+                { code: '440301', name: '罗湖区' },
+                { code: '440302', name: '福田区' },
+                { code: '440303', name: '南山区' },
+                { code: '440304', name: '宝安区' },
+                { code: '440305', name: '龙岗区' },
+                { code: '440306', name: '盐田区' },
+                { code: '440307', name: '龙华区' },
+                { code: '440308', name: '坪山区' },
+                { code: '440309', name: '光明区' },
+                { code: '440310', name: '大鹏新区' }
+            ]
+        };
+
+        // 页面加载时初始化省份数据
+        window.onload = function() {
+            const provinceSelect = document.getElementById('province');
+            provinceData.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.code;
+                option.textContent = province.name;
+                provinceSelect.appendChild(option);
+            });
+        };
+
+        function selectProvince() {
+            const provinceCode = document.getElementById('province').value;
+            const citySelect = document.getElementById('city');
+            const districtSelect = document.getElementById('district');
+            
+            // 重置城市和区县
+            citySelect.innerHTML = '<option value="">请选择城市</option>';
+            districtSelect.innerHTML = '<option value="">请选择区县</option>';
+            citySelect.disabled = true;
+            districtSelect.disabled = true;
+            
+            if (provinceCode && cityData[provinceCode]) {
+                citySelect.disabled = false;
+                cityData[provinceCode].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.code;
+                    option.textContent = city.name;
+                    citySelect.appendChild(option);
+                });
+            }
+            
+            updateContactAddress();
+        }
+
+        function selectCity() {
+            const cityCode = document.getElementById('city').value;
+            const districtSelect = document.getElementById('district');
+            
+            // 重置区县
+            districtSelect.innerHTML = '<option value="">请选择区县</option>';
+            districtSelect.disabled = true;
+            
+            if (cityCode && districtData[cityCode]) {
+                districtSelect.disabled = false;
+                districtData[cityCode].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.code;
+                    option.textContent = district.name;
+                    districtSelect.appendChild(option);
+                });
+            }
+            
+            updateContactAddress();
+        }
+
+        // 监听区县变化，更新地址
+        document.addEventListener('DOMContentLoaded', function() {
+            const districtSelect = document.getElementById('district');
+            if (districtSelect) {
+                districtSelect.addEventListener('change', updateContactAddress);
+            }
+            
+            // 监听详细地址输入
+            const contactAddress = document.getElementById('contactAddress');
+            if (contactAddress) {
+                contactAddress.addEventListener('input', updateContactAddress);
+            }
+
+            // 监听银行账号输入，实时验证
+            const bankAccountNumber = document.getElementById('bankAccountNumber');
+            const confirmBankAccount = document.getElementById('confirmBankAccount');
+            if (bankAccountNumber) {
+                bankAccountNumber.addEventListener('input', validateBankAccountMatch);
+            }
+            if (confirmBankAccount) {
+                confirmBankAccount.addEventListener('input', validateBankAccountMatch);
+            }
+        });
+
+        function updateContactAddress() {
+            const provinceSelect = document.getElementById('province');
+            const citySelect = document.getElementById('city');
+            const districtSelect = document.getElementById('district');
+            const detailAddress = document.getElementById('contactAddress');
+            
+            let address = '';
+            if (provinceSelect.value) {
+                address += provinceSelect.options[provinceSelect.selectedIndex].text;
+            }
+            if (citySelect.value && !citySelect.disabled) {
+                address += ' ' + citySelect.options[citySelect.selectedIndex].text;
+            }
+            if (districtSelect.value && !districtSelect.disabled) {
+                address += ' ' + districtSelect.options[districtSelect.selectedIndex].text;
+            }
+            
+            // 保存完整地址到formData
+            formData.province = provinceSelect.value;
+            formData.city = citySelect.value;
+            formData.district = districtSelect.value;
+            formData.detailAddress = detailAddress.value;
+            formData.contactAddress = address + (detailAddress.value ? ' ' + detailAddress.value : '');
+        }
+
+        function validateBankAccountMatch() {
+            const accountNumber = document.getElementById('bankAccountNumber').value;
+            const confirmAccount = document.getElementById('confirmBankAccount').value;
+            const matchDiv = document.getElementById('bankAccountMatch');
+            
+            if (!accountNumber || !confirmAccount) {
+                matchDiv.style.display = 'none';
+                return true;
+            }
+            
+            if (accountNumber === confirmAccount) {
+                matchDiv.style.display = 'block';
+                matchDiv.style.color = 'var(--success)';
+                matchDiv.innerHTML = '✅ 银行账号一致';
+                return true;
+            } else {
+                matchDiv.style.display = 'block';
+                matchDiv.style.color = 'var(--error)';
+                matchDiv.innerHTML = '❌ 银行账号不一致，请重新输入';
+                return false;
             }
         }
 
@@ -1144,9 +1565,32 @@
                     showMessage('请输入邮箱地址', 'error');
                     return false;
                 }
-                if (!document.getElementById('contactAddress').value) {
-                    showMessage('请输入联系地址', 'error');
+                if (!document.getElementById('province').value) {
+                    showMessage('请选择省份', 'error');
                     return false;
+                }
+                if (!document.getElementById('contactAddress').value) {
+                    showMessage('请输入详细地址', 'error');
+                    return false;
+                }
+            } else if (currentStep === 4) {
+                // 如果有银行账户，验证账号一致性
+                if (formData.hasBankAccount) {
+                    const accountNumber = document.getElementById('bankAccountNumber').value;
+                    const confirmAccount = document.getElementById('confirmBankAccount').value;
+                    
+                    if (!accountNumber) {
+                        showMessage('请输入银行账号', 'error');
+                        return false;
+                    }
+                    if (!confirmAccount) {
+                        showMessage('请确认银行账号', 'error');
+                        return false;
+                    }
+                    if (accountNumber !== confirmAccount) {
+                        showMessage('银行账号不一致，请重新输入', 'error');
+                        return false;
+                    }
                 }
             }
             hideMessage();
@@ -1166,11 +1610,13 @@
                 formData.contactName = document.getElementById('contactName').value;
                 formData.contactPhone = document.getElementById('contactPhone').value;
                 formData.contactEmail = document.getElementById('contactEmail').value;
-                formData.contactAddress = document.getElementById('contactAddress').value;
+                // 保存地址信息
+                updateContactAddress();
             } else if (currentStep === 4) {
                 formData.bankAccountName = document.getElementById('bankAccountName').value;
                 formData.bankName = document.getElementById('bankName').value;
                 formData.bankAccountNumber = document.getElementById('bankAccountNumber').value;
+                formData.confirmBankAccount = document.getElementById('confirmBankAccount').value;
                 formData.bankBranch = document.getElementById('bankBranch').value;
             }
         }
@@ -1274,7 +1720,7 @@
                     </div>
                     <div style="grid-column: 1 / -1;">
                         <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">联系地址</div>
-                        <div style="font-size: 14px; color: var(--text-primary);">${formData.contactAddress}</div>
+                        <div style="font-size: 14px; color: var(--text-primary);">${formData.contactAddress || '待填写'}</div>
                     </div>
             `;
 
